@@ -4,33 +4,35 @@ import urllib.request
 import time
 from adventofcode_utils.user import User
 import operator
+from dotenv import load_dotenv
 
 class Leaderboard(object):
     def __init__(self):
+        load_dotenv()
         self.sortedUsers = {}
-        self.sessid = "53616c7465645f5f9cc1d3ca6f068cc4ee74c0d0fb614cb510e07801c0c9ada2d56e6f9397745b9e742b4d5334caa052"
-        self.url = "https://adventofcode.com/2021/leaderboard/private/view/959961.json"
+        self.sessid = os.getenv('SESSION_ID')
+        self.url = os.getenv('LEADERBOARD_URL')
         self.lastUpdate = 0;
 
     def get(self):
-        users = {}
-        # #checking if 15 minutes from previous request has already passed
-        # #its important because we dont want to cause issues to the creator of AoC!!!!
+        #Prevent overloading AoC api
         if(self.lastUpdate != 0):
             if((time.time() - self.lastUpdate) < 900):
-                return self.users
+                return self.sortedUsers
         
-        #getting the json of your leaderboards
         response = urllib.request.urlopen( urllib.request.Request(self.url, headers = { 'Cookie' : 'session='+self.sessid }) )
+
         #check if server is alive
         if(response.getcode() != 200):
             return "The site has died, please try again later"
-        #checking if cookie hasnt expired, they tend to expire after around a month so putting a fresh one on the start of december should last until the end
+
+        #checking if cookie hasnt expired
         try:
             variables = json.loads(response.read())
         except ValueError as e:
             return "The Cookie has expired :("
 
+        users = {}
         for x, player in variables["members"].items():
             data = {}
 
