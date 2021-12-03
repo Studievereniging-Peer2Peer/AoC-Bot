@@ -16,7 +16,7 @@ class AdventOfCode(commands.Cog):
         score = ""
         stars = ""
 
-        embed=discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄", url="hhttps://adventofcode.com/2021/leaderboard/private/view/959961", color=0xaf0e0e)
+        embed=discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄", url="https://adventofcode.com/2021/leaderboard/private/view/959961", color=0xaf0e0e)
         for i in range(20):
             if i == 0:
                 names += "**🌟 {}: {}**\n".format((i+1), data[i].name)
