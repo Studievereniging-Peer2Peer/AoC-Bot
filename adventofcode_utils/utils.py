@@ -9,7 +9,7 @@ class Utils():
         difference = endTime - startTime
 
         #Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
-        fmt = "{D} days {H} hrs {M} mins {S} secs"
+        fmt = "**{D}** days **{H}** hrs **{M}** mins **{S}** secs"
         f = Formatter()
         d = {}
         l = {'D': 86400, 'H': 3600, 'M': 60, 'S': 1}
