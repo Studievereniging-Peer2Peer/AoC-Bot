@@ -57,7 +57,7 @@ class AdventOfCode(commands.Cog):
                 embed=discord.Embed(title=user.name, color=0x10941f)
                 embed.add_field(name="Position", value=user.position, inline=True)
                 embed.add_field(name="Local Score", value=user.score, inline=True)
-                embed.add_field(name="Stars", value=user.stars, inline=False)
+                embed.add_field(name="Stars", value=user.stars, inline=True)
                 embed.set_footer(text='use `&user "{name}" {day}` for detailed day to day information')
                 await ctx.send(embed=embed)
                 break
