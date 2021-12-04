@@ -3,10 +3,8 @@ from string import Formatter
 
 class Utils():
 
-    def timeTaken(day, timestamp):
-        startTime = datetime.datetime(2021, 12, day, 6, 0, 0, 0)
-        endTime = datetime.datetime.fromtimestamp(timestamp)
-        difference = endTime - startTime
+    def timeTaken(startTime, endTime):
+        difference = datetime.datetime.fromtimestamp(endTime) - datetime.datetime.fromtimestamp(startTime)
 
         #Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
         fmt = "**{D}** days **{H}** hrs **{M}** mins **{S}** secs"
