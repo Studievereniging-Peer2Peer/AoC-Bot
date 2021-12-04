@@ -4,3 +4,4 @@ class User(object):
         self.score = score
         self.stars = stars
         self.days = days
+        self.position = -1

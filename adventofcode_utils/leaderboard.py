@@ -34,17 +34,24 @@ class Leaderboard(object):
 
         users = {}
         for x, player in variables["members"].items():
-            data = {}
+            days = {}
 
             if player["stars"] > 0:
                 for day, stars in player["completion_day_level"].items():
-                    data[day] = len(stars)
+                    days[day] = stars
+                for day in range(1, 26):
+                    if str(day) not in days.keys():
+                        days[str(day)] = ''
 
-            users[x] = User(player["name"], player["local_score"], player["stars"], data)
+            if player["name"] == None:
+                player["name"] = "Anonymous"
+
+            users[x] = User(player["name"], player["local_score"], player["stars"], days)
         
         counter = 0
         for key in sorted(users.values(), key=operator.attrgetter('score'), reverse=True):
             self.sortedUsers[counter] = key
+            self.sortedUsers[counter].position = (counter+1)
             counter+=1
 
         self.lastUpdate = time.time()
