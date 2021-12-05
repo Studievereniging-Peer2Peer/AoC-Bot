@@ -10,7 +10,7 @@ class AdventOfCode(commands.Cog):
     def __init__(self, bot):
         self.leaderboard = Leaderboard()
 
-    @commands.command(brief="", description="")
+    @commands.command(brief="Shows the top 20 players", description="Shows the list of the top 20 players, with their local score and obtained stars.")
     async def leaderboard(self, ctx):
         data = self.leaderboard.get()
         names = ""
@@ -46,10 +46,10 @@ class AdventOfCode(commands.Cog):
         embed.add_field(name="Name", value=names, inline=True)
         embed.add_field(name="Score", value=score, inline=True)
         embed.add_field(name="Stars", value=stars, inline=True)
-        embed.set_footer(text="Updated at: {}\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄".format(datetime.datetime.fromtimestamp(self.leaderboard.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
+        embed.set_footer(text="Updated at: {}\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁".format(datetime.datetime.fromtimestamp(self.leaderboard.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
         await ctx.send(embed=embed)
 
-    @commands.command(brief="", description="")
+    @commands.command(brief="Shows overview of a specific player", description="By adding an optional day argument it will also show the time taken for finished parts.")
     async def user(self, ctx, name="", day=None):
         data = self.leaderboard.get()
         for i, user in data.items():
@@ -57,11 +57,13 @@ class AdventOfCode(commands.Cog):
                 embed=discord.Embed(title="{}".format(user.name), color=0x13A10E)
                 embed.add_field(name="Position", value=user.position, inline=True)
                 embed.add_field(name="Local Score", value=user.score, inline=True)
-                stars = ""
+                if user.globalScore > 0:
+                    embed.add_field(name="Global Score", value=user.globalScore, inline=True)
+                stars = "\u200b" #With an additional normal character the star emoji gets smaller on mobile devices, thus fitting better
                 for i in range(round(int(user.stars)/2)):
                     stars += "⭐"
                 embed.add_field(name="Days completed", value=stars, inline=False)
-                embed.set_footer(text='use `&user "{name}" {day}` for detailed day to day information\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
+                embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
                 break
             elif user.name.lower() == name.lower() and int(day) < 26:
@@ -74,11 +76,11 @@ class AdventOfCode(commands.Cog):
                         embed.add_field(name="Part 1", value=Utils.timeTaken(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=False)
                         if len(user.days[day]) == 2:
                             embed.add_field(name="Part 2", value=Utils.timeTaken(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=False)
-                embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄')
+                embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
                 break
 
-    @commands.command(brief="", description="")
+    @commands.command(brief="Compare 2 players their time taken for each day", description="Shows the faster of the 2 players, time is relative to each other.")
     async def userCmp(self, ctx, name="", nameCmp="", day=None):
         data = self.leaderboard.get()
         user1 = {}
@@ -112,6 +114,6 @@ class AdventOfCode(commands.Cog):
                     else:
                         embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=False)
         
-        embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄')
+        embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
         await ctx.send(embed=embed)
             

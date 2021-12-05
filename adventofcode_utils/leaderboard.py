@@ -46,7 +46,7 @@ class Leaderboard(object):
             if player["name"] == None:
                 player["name"] = "Anonymous"
 
-            users[x] = User(player["name"], player["local_score"], player["stars"], days)
+            users[x] = User(player["name"], player["local_score"], player["global_score"], player["stars"], days)
         
         counter = 0
         for key in sorted(users.values(), key=operator.attrgetter('score'), reverse=True):
