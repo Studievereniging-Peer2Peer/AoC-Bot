@@ -17,7 +17,7 @@ class AdventOfCode(commands.Cog):
         score = ""
         stars = ""
 
-        embed=discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄", url="https://adventofcode.com/2021/leaderboard/private/view/959961", color=0xaf0e0e)
+        embed=discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄", url="https://adventofcode.com/2021/leaderboard/private/view/959961", color=0xC03221)
         for i in range(20):
             if i == 0:
                 names += "**🌟 {}: {}**\n".format((i+1), data[i].name)
@@ -46,7 +46,7 @@ class AdventOfCode(commands.Cog):
         embed.add_field(name="Name", value=names, inline=True)
         embed.add_field(name="Score", value=score, inline=True)
         embed.add_field(name="Stars", value=stars, inline=True)
-        embed.set_footer(text="Updated at: {}".format(datetime.datetime.fromtimestamp(self.leaderboard.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
+        embed.set_footer(text="Updated at: {}\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄".format(datetime.datetime.fromtimestamp(self.leaderboard.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
         await ctx.send(embed=embed)
 
     @commands.command(brief="", description="")
@@ -54,23 +54,27 @@ class AdventOfCode(commands.Cog):
         data = self.leaderboard.get()
         for i, user in data.items():
             if user.name.lower() == name.lower() and day == None:
-                embed=discord.Embed(title=user.name, color=0x10941f)
+                embed=discord.Embed(title="{}".format(user.name), color=0x13A10E)
                 embed.add_field(name="Position", value=user.position, inline=True)
                 embed.add_field(name="Local Score", value=user.score, inline=True)
-                embed.add_field(name="Stars", value=user.stars, inline=True)
-                embed.set_footer(text='use `&user "{name}" {day}` for detailed day to day information')
+                stars = ""
+                for i in range(round(int(user.stars)/2)):
+                    stars += "⭐"
+                embed.add_field(name="Days completed", value=stars, inline=False)
+                embed.set_footer(text='use `&user "{name}" {day}` for detailed day to day information\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
                 break
             elif user.name.lower() == name.lower() and int(day) < 26:
-                embed=discord.Embed(title=user.name, color=0x10941f)
-                embed.add_field(name="Day", value=day, inline=True)
-                embed.add_field(name="Stars", value=len(user.days[day]), inline=True)
+                stars = ""
+                for i in range(len(user.days[day])):
+                    stars += "⭐"
+                embed=discord.Embed(title="{}".format(user.name), description="**Day:** {} **Stars:** {}".format(day, stars), color=0x13A10E)
                 if len(user.days[day]) > 0:
-                    embed.add_field(name="\u200b", value="**Time per star**\n_Part 2 time is the time after completing part 1_", inline=False)
                     if len(user.days[day]) >= 1:
-                        embed.add_field(name="Part 1", value=Utils.timeTaken(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=True)
+                        embed.add_field(name="Part 1", value=Utils.timeTaken(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=False)
                         if len(user.days[day]) == 2:
-                            embed.add_field(name="Part 2", value=Utils.timeTaken(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=True)
+                            embed.add_field(name="Part 2", value=Utils.timeTaken(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=False)
+                embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄')
                 await ctx.send(embed=embed)
                 break
 
@@ -85,7 +89,7 @@ class AdventOfCode(commands.Cog):
             if user.name.lower() == nameCmp.lower():
                 user2 = user
 
-        embed=discord.Embed(title="**{}** vs **{}** dag **{}**".format(user1.name, user2.name, day), color=0x10941f)
+        embed=discord.Embed(title="{} vs {}".format(user1.name, user2.name), description="**Day:** {}".format(day), color=0xFFB900)
 
         if user1 is not None and user2 is not None:
             if user1.days[day] == '':
@@ -94,9 +98,9 @@ class AdventOfCode(commands.Cog):
                 embed.add_field(name="\u200b", value="**{}** has not done this day".format(user2.name), inline=True)
             else:
                 if(int(user1.days[day][str(1)]['get_star_ts']) < int(user2.days[day][str(1)]['get_star_ts'])):
-                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=True)
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=False)
                 else:
-                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=True)
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=False)
                 
                 if str(2) not in user1.days[day]:
                     embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user1.name), inline=True)
@@ -104,9 +108,10 @@ class AdventOfCode(commands.Cog):
                     embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user2.name), inline=True)
                 else:
                     if(int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts'])):
-                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(2)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])), inline=True)
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(2)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])), inline=False)
                     else:
-                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=True)
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=False)
         
+        embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄')
         await ctx.send(embed=embed)
             
