@@ -73,3 +73,40 @@ class AdventOfCode(commands.Cog):
                             embed.add_field(name="Part 2", value=Utils.timeTaken(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=True)
                 await ctx.send(embed=embed)
                 break
+
+    @commands.command(brief="", description="")
+    async def userCmp(self, ctx, name="", nameCmp="", day=None):
+        data = self.leaderboard.get()
+        user1 = {}
+        user2 = {}
+        for i, user in data.items():
+            if user.name.lower() == name.lower():
+                user1 = user
+            if user.name.lower() == nameCmp.lower():
+                user2 = user
+
+        embed=discord.Embed(title="**{}** vs **{}** dag **{}**".format(user1.name, user2.name, day), color=0x10941f)
+
+        if user1 is not None and user2 is not None:
+            if user1.days[day] == '':
+                embed.add_field(name="\u200b", value="**{}** has not done this day".format(user1.name), inline=True)
+            elif user2.days[day] == '':
+                embed.add_field(name="\u200b", value="**{}** has not done this day".format(user2.name), inline=True)
+            else:
+                if(int(user1.days[day][str(1)]['get_star_ts']) < int(user2.days[day][str(1)]['get_star_ts'])):
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=True)
+                else:
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=True)
+                
+                if str(2) not in user1.days[day]:
+                    embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user1.name), inline=True)
+                elif str(2) not in user2.days[day]:
+                    embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user2.name), inline=True)
+                else:
+                    if(int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts'])):
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(2)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])), inline=True)
+                    else:
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=True)
+        
+        await ctx.send(embed=embed)
+            
