@@ -60,17 +60,25 @@ class AdventOfCode(commands.Cog):
                 if user.globalScore > 0:
                     embed.add_field(name="Global Score", value=user.globalScore, inline=True)
                 stars = "\u200b" #With an additional normal character the star emoji gets smaller on mobile devices, thus fitting better
-                for i in range(round(int(user.stars)/2)):
-                    stars += "⭐"
+                # for i in range(round(int(user.stars)/2)):
+                for i in range(1, 26):
+                    if len(user.days[str(i)]) == 2:
+                        stars += "⭐"
+                    elif len(user.days[str(i)]) == 1:
+                        stars += "<:silver_star:918552091553857536>"
+                    else:
+                        stars += "<:no_star:918553772739932221>"
                 embed.add_field(name="Days completed", value=stars, inline=False)
                 embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
                 break
             elif user.name.lower() == name.lower() and int(day) < 26:
                 stars = ""
-                for i in range(len(user.days[day])):
-                    stars += "⭐"
-                embed=discord.Embed(title="{}".format(user.name), description="**Day:** {} **Stars:** {}".format(day, stars), color=0x13A10E)
+                if len(user.days[str(day)]) == 2:
+                    stars = "⭐"
+                elif len(user.days[str(day)]) == 1:
+                    stars = "<:silver_star:918552091553857536>"
+                embed=discord.Embed(title="{}".format(user.name), description="**Day:** {} {}".format(day, stars), color=0x13A10E)
                 if len(user.days[day]) > 0:
                     if len(user.days[day]) >= 1:
                         embed.add_field(name="Part 1", value=Utils.timeTaken(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=False)
@@ -90,6 +98,8 @@ class AdventOfCode(commands.Cog):
                 user1 = user
             if user.name.lower() == nameCmp.lower():
                 user2 = user
+            if user1 and user2:
+                break
 
         embed=discord.Embed(title="{} vs {}".format(user1.name, user2.name), description="**Day:** {}".format(day), color=0xFFB900)
 
@@ -99,7 +109,7 @@ class AdventOfCode(commands.Cog):
             elif user2.days[day] == '':
                 embed.add_field(name="\u200b", value="**{}** has not done this day".format(user2.name), inline=True)
             else:
-                if(int(user1.days[day][str(1)]['get_star_ts']) < int(user2.days[day][str(1)]['get_star_ts'])):
+                if int(user1.days[day][str(1)]['get_star_ts']) < int(user2.days[day][str(1)]['get_star_ts']):
                     embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=False)
                 else:
                     embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=False)
@@ -109,11 +119,31 @@ class AdventOfCode(commands.Cog):
                 elif str(2) not in user2.days[day]:
                     embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user2.name), inline=True)
                 else:
-                    if(int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts'])):
+                    if int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts']):
                         embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(2)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])), inline=False)
                     else:
                         embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=False)
         
         embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
         await ctx.send(embed=embed)
-            
+
+    # @commands.command(brief="Compare 2 players their time taken for each day", description="Shows the faster of the 2 players, time is relative to each other.")
+    # async def fastest(self, ctx, day=None):
+    #     data = self.leaderboard.get()
+    #     part1 = {}
+    #     part2 = {}
+
+    #     for i, user in data.items():
+    #         if user.days[day] != "":
+    #             if user.days[day][str(1)]['get_star_ts'] != None and part1 == None:
+    #                 part1 = user
+    #             if user.days[day][str(2)]['get_star_ts'] != None and part2 == None:
+    #                 part2 = user
+    #             else:
+    #                 if user.days[day][str(1)]['get_star_ts'] != None:
+    #                     if int(user.days[day][str(1)]['get_star_ts']) < int(part1.days[day][str(1)]['get_star_ts']):
+    #                         part1 = user
+    #                 if user.days[day][str(2)]['get_star_ts'] != None:
+    #                     if int(user.days[day][str(2)]['get_star_ts']) < int(part2.days[day][str(2)]['get_star_ts']):
+    #                         part2 = user
+    #     await ctx.send("{} was fast so was {}".format(part1.name, part2.name))

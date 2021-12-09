@@ -39,9 +39,10 @@ class Leaderboard(object):
             if player["stars"] > 0:
                 for day, stars in player["completion_day_level"].items():
                     days[day] = stars
-                for day in range(1, 26):
-                    if str(day) not in days.keys():
-                        days[str(day)] = ''
+                    
+            for day in range(1, 26):
+                if str(day) not in days.keys():
+                    days[str(day)] = ''
 
             if player["name"] == None:
                 player["name"] = "Anonymous"
