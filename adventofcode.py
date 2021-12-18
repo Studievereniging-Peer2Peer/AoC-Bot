@@ -68,6 +68,8 @@ class AdventOfCode(commands.Cog):
                         stars += "<:silver_star:918552091553857536>"
                     else:
                         stars += "<:no_star:918553772739932221>"
+                    if i % 5 == 0 and i != 0:
+                        stars+="\n";
                 embed.add_field(name="Days completed", value=stars, inline=False)
                 embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
@@ -81,9 +83,9 @@ class AdventOfCode(commands.Cog):
                 embed=discord.Embed(title="{}".format(user.name), description="**Day:** {} {}".format(day, stars), color=0x13A10E)
                 if len(user.days[day]) > 0:
                     if len(user.days[day]) >= 1:
-                        embed.add_field(name="Part 1", value=Utils.timeTaken(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=False)
+                        embed.add_field(name="Part 1", value=Utils.timeTakenFormatted(datetime.datetime(2021, 12, int(day), 6).timestamp(), user.days[day][str(1)]['get_star_ts']), inline=False)
                         if len(user.days[day]) == 2:
-                            embed.add_field(name="Part 2", value=Utils.timeTaken(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=False)
+                            embed.add_field(name="Part 2", value=Utils.timeTakenFormatted(user.days[day][str(1)]['get_star_ts'], user.days[day][str(2)]['get_star_ts']), inline=False)
                 embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
                 await ctx.send(embed=embed)
                 break
@@ -110,19 +112,22 @@ class AdventOfCode(commands.Cog):
                 embed.add_field(name="\u200b", value="**{}** has not done this day".format(user2.name), inline=True)
             else:
                 if int(user1.days[day][str(1)]['get_star_ts']) < int(user2.days[day][str(1)]['get_star_ts']):
-                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=False)
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user1.name, Utils.timeTakenFormatted(user1.days[day][str(1)]['get_star_ts'], user2.days[day][str(1)]['get_star_ts'])), inline=False)
                 else:
-                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=False)
+                    embed.add_field(name="Part 1", value="**{}** was {} faster".format(user2.name, Utils.timeTakenFormatted(user2.days[day][str(1)]['get_star_ts'], user1.days[day][str(1)]['get_star_ts'])), inline=False)
                 
                 if str(2) not in user1.days[day]:
                     embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user1.name), inline=True)
                 elif str(2) not in user2.days[day]:
                     embed.add_field(name="Part2", value="{} has not done part 2 yet".format(user2.name), inline=True)
                 else:
-                    if int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts']):
-                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeTaken(user1.days[day][str(2)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])), inline=False)
+                    user1P2 = Utils.timeTaken(user1.days[day][str(1)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])
+                    user2P2 = Utils.timeTaken(user2.days[day][str(1)]['get_star_ts'], user2.days[day][str(2)]['get_star_ts'])
+                    if user1P2 < user2P2:
+                    # if int(user1.days[day][str(2)]['get_star_ts']) < int(user2.days[day][str(2)]['get_star_ts']):
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user1.name, Utils.timeDeltaFormatted(user1P2, user2P2)), inline=False)
                     else:
-                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeTaken(user2.days[day][str(2)]['get_star_ts'], user1.days[day][str(2)]['get_star_ts'])), inline=False)
+                        embed.add_field(name="Part 2", value="**{}** was {} faster".format(user2.name, Utils.timeDeltaFormatted(user2P2, user1P2)), inline=False)
         
         embed.set_footer(text='🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁')
         await ctx.send(embed=embed)
