@@ -1,7 +1,8 @@
 import datetime
 from string import Formatter
 
-class Utils():
+
+class Utils:
 
     def timeTaken(startTime, endTime):
         difference = datetime.datetime.fromtimestamp(endTime) - datetime.datetime.fromtimestamp(startTime)
@@ -10,12 +11,12 @@ class Utils():
     def timeTakenFormatted(startTime, endTime):
         difference = datetime.datetime.fromtimestamp(endTime) - datetime.datetime.fromtimestamp(startTime)
 
-        #Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
+        # Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
         fmt = "**{D}** days **{H}** hrs **{M}** mins **{S}** secs"
         f = Formatter()
         d = {}
         l = {'D': 86400, 'H': 3600, 'M': 60, 'S': 1}
-        k = map( lambda x: x[1], list(f.parse(fmt)))
+        k = map(lambda x: x[1], list(f.parse(fmt)))
         rem = int(difference.total_seconds())
 
         for i in ('D', 'H', 'M', 'S'):
@@ -27,12 +28,12 @@ class Utils():
     def timeDeltaFormatted(startTime, endTime):
         difference = endTime - startTime
 
-        #Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
+        # Thanks to mpounsett https://stackoverflow.com/questions/8906926/formatting-timedelta-objects
         fmt = "**{D}** days **{H}** hrs **{M}** mins **{S}** secs"
         f = Formatter()
         d = {}
         l = {'D': 86400, 'H': 3600, 'M': 60, 'S': 1}
-        k = map( lambda x: x[1], list(f.parse(fmt)))
+        k = map(lambda x: x[1], list(f.parse(fmt)))
         rem = int(difference.total_seconds())
 
         for i in ('D', 'H', 'M', 'S'):
