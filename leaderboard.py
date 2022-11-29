@@ -2,9 +2,10 @@ import os
 import json
 import urllib.request
 import time
-from adventofcode_utils.user import User
+from user import User
 import operator
 from dotenv import load_dotenv
+
 
 class Leaderboard(object):
     def __init__(self):
@@ -15,18 +16,19 @@ class Leaderboard(object):
         self.lastUpdate = 0;
 
     def get(self):
-        #Prevent overloading AoC api
-        if(self.lastUpdate != 0):
-            if((time.time() - self.lastUpdate) < 900):
+        # Prevent overloading AoC api
+        if (self.lastUpdate != 0):
+            if ((time.time() - self.lastUpdate) < 900):
                 return self.sortedUsers
-        
-        response = urllib.request.urlopen( urllib.request.Request(self.url, headers = { 'Cookie' : 'session='+self.sessid }) )
 
-        #check if server is alive
-        if(response.getcode() != 200):
+        response = urllib.request.urlopen(
+            urllib.request.Request(self.url, headers={'Cookie': 'session=' + self.sessid}))
+
+        # check if server is alive
+        if (response.getcode() != 200):
             return "The site has died, please try again later"
 
-        #checking if cookie hasnt expired
+        # checking if cookie hasnt expired
         try:
             variables = json.loads(response.read())
         except ValueError as e:
@@ -39,7 +41,7 @@ class Leaderboard(object):
             if player["stars"] > 0:
                 for day, stars in player["completion_day_level"].items():
                     days[day] = stars
-                    
+
             for day in range(1, 26):
                 if str(day) not in days.keys():
                     days[str(day)] = ''
@@ -48,12 +50,12 @@ class Leaderboard(object):
                 player["name"] = "Anonymous"
 
             users[x] = User(player["name"], player["local_score"], player["global_score"], player["stars"], days)
-        
+
         counter = 0
         for key in sorted(users.values(), key=operator.attrgetter('score'), reverse=True):
             self.sortedUsers[counter] = key
-            self.sortedUsers[counter].position = (counter+1)
-            counter+=1
+            self.sortedUsers[counter].position = (counter + 1)
+            counter += 1
 
         self.lastUpdate = time.time()
 
