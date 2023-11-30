@@ -14,6 +14,9 @@ class Leaderboard(object):
         self.sessid = os.getenv('SESSION_ID')
         self.url = os.getenv('LEADERBOARD_URL')
         self.lastUpdate = 0;
+    
+        if self.url is None or self.sessid is None:
+            quit()
 
     def get(self):
         # Prevent overloading AoC api

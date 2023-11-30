@@ -7,6 +7,9 @@ from adventofcode import AdventOfCode
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+if TOKEN is None:
+    quit()
+
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -17,7 +20,7 @@ bot = commands.Bot(command_prefix='&', intents=intents)
 
 @bot.event
 async def on_ready():
-    bot.add_cog(AdventOfCode(bot))
+    await bot.add_cog(AdventOfCode(bot))
     print("Bot ready\n")
 
 
