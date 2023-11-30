@@ -21,7 +21,7 @@ class AdventOfCode(commands.Cog):
         stars = ""
 
         embed = discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄",
-                              url="https://adventofcode.com/2022/leaderboard/private/view/959961", color=0xC03221)
+                              url="https://adventofcode.com/2023/leaderboard/private/view/959961", color=0xC03221)
         for i in range(20):
             if i == 0:
                 names += "**🌟 {}: {}**\n".format((i + 1), data[i].name)
@@ -91,7 +91,7 @@ class AdventOfCode(commands.Cog):
                 if len(user.days[day]) > 0:
                     if len(user.days[day]) >= 1:
                         embed.add_field(name="Part 1", value=Utils.timeTakenFormatted(
-                            datetime.datetime(2022, 12, int(day), 6).timestamp(),
+                            datetime.datetime(2023, 12, int(day), 6).timestamp(),
                             user.days[day][str(1)]['get_star_ts']), inline=False)
                         if len(user.days[day]) == 2:
                             embed.add_field(name="Part 2",
