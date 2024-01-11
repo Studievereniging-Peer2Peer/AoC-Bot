@@ -157,13 +157,11 @@ class AdventOfCodeCommands(commands.Cog):
         else:
             if user1_star1_ts < user2_star1_ts:
                 embed.add_field(name="Part 1",
-                                value=f"**{user1.name}** was {utils.timeTakenFormatted(user1_star1_ts,
-                                                                                        user2_star1_ts)} faster",
+                                value=f"**{user1.name}** was {utils.timeTakenFormatted(user1_star1_ts, user2_star1_ts)} faster",
                                 inline=False)
             else:
                 embed.add_field(name="Part 1",
-                                value=f"**{user2.name}** was {utils.timeTakenFormatted(user2_star1_ts,
-                                                                                        user1_star1_ts)} faster",
+                                value=f"**{user2.name}** was {utils.timeTakenFormatted(user2_star1_ts, user1_star1_ts)} faster",
                                 inline=False)
 
         user1_star2_ts = user1.days[day].get_star_2_ts
@@ -176,17 +174,15 @@ class AdventOfCodeCommands(commands.Cog):
         else:
             if user1_star2_ts < user2_star2_ts:
                 embed.add_field(name="Part 2",
-                                value=f"**{user1.name}** was {utils.timeTakenFormatted(user1_star2_ts,
-                                                                                    user2_star2_ts)} faster",
+                                value=f"**{user1.name}** was {utils.timeTakenFormatted(user1_star2_ts, user2_star2_ts)} faster",
                                 inline=False)
             else:
                 embed.add_field(name="Part 2",
-                                value=f"**{user2.name}** was {utils.timeTakenFormatted(user2_star2_ts,
-                                                                                    user1_star2_ts)} faster",
+                                value=f"**{user2.name}** was {utils.timeTakenFormatted(user2_star2_ts, user1_star2_ts)} faster",
                                 inline=False)
 
         embed.set_footer(text="Updated at: {}\n🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁🎄🎁".format(
-                datetime.datetime.fromtimestamp(self.aoc_api.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
+            datetime.datetime.fromtimestamp(self.aoc_api.lastUpdate).strftime('%Y-%m-%d %H:%M:%S')))
         await ctx.send(embed=embed)
 
     # @commands.command(brief="Compare 2 players their time taken for each day", description="Shows the faster of the 2 players, time is relative to each other.")
