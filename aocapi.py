@@ -76,7 +76,7 @@ class AoCAPI(object):
                          player["global_score"], player["stars"], days))
 
         # Sort the users list
-        users.sort(key=lambda x: x.localScore)
+        users.sort(key=lambda x: x.localScore, reverse=True)
 
         # Set leaderboard positions in User objects
         for i in range(len(users)):

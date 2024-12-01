@@ -10,8 +10,9 @@ import random
 class AdventOfCodeCommands(commands.Cog):
     """Advent of Code"""
 
-    def __init__(self, bot):
+    def __init__(self, year):
         self.aoc_api = AoCAPI()
+        self.year = year
 
     @commands.command(brief="Shows the top 20 players",
                       description="Shows the list of the top 20 players, with their local score and obtained stars.")
@@ -22,7 +23,7 @@ class AdventOfCodeCommands(commands.Cog):
         stars = ""
 
         embed = discord.Embed(title="🎄 Peer2Peer Advent of Code leaderboard 🎄",
-                              url="https://adventofcode.com/2023/leaderboard/private/view/959961", color=0xC03221)
+                              url=f"https://adventofcode.com/{self.year}/leaderboard/private/view/959961", color=0xC03221)
         for i in range(20):
             user = leaderboard_users[i]
             if i == 0:
@@ -103,7 +104,7 @@ class AdventOfCodeCommands(commands.Cog):
             if user.days[day].get_star_1_ts != None:
                 val = utils.timeTakenFormatted(
                     datetime.datetime(
-                        2023, 12, int(day), 6).timestamp(),
+                        self.year, 12, int(day), 6).timestamp(),
                     user.days[day].get_star_1_ts)
                 embed.add_field(name="Part 1", value=val, inline=False)
 
@@ -131,7 +132,7 @@ class AdventOfCodeCommands(commands.Cog):
             embed = discord.Embed(
                 title=f"You must specify a day."
             )
-            ctx.send(embed=embed)
+            await ctx.send(embed=embed)
             return
 
         user1 = utils.getUserFromLeaderboard(leaderboard_users, name1)
