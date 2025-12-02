@@ -73,7 +73,7 @@ class AoCAPI(object):
                 days[day] = day_obj
 
             users.append(User(player["name"], player["local_score"],
-                         player["global_score"], player["stars"], days))
+                         0, player["stars"], days))
 
         # Sort the users list
         users.sort(key=lambda x: x.localScore, reverse=True)
